@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Orçamento Kit Festa</title>
+<style>
+:root{--bg:#fff7f9;--card:#ffffff;--ink:#2b1d22;--mut:#7a6a70;--line:#ecd9df;--acc:#be466e;--accink:#ffffff;--soft:#fbe9ef;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1317;--card:#261b21;--ink:#f6e9ee;--mut:#b9a5ad;--line:#3d2c34;--acc:#e0709a;--accink:#2b1019;--soft:#33232b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1b1317;--card:#261b21;--ink:#f6e9ee;--mut:#b9a5ad;--line:#3d2c34;--acc:#e0709a;--accink:#2b1019;--soft:#33232b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:620px;margin:0 auto;padding:18px 14px 40px}
+h1{font-size:22px;margin:4px 0 2px}
+.sub{color:var(--mut);margin:0 0 16px;font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+h2{font-size:15px;margin:0 0 8px;color:var(--acc)}
+.desc{background:var(--soft);border-radius:10px;padding:9px 11px;margin:0 0 12px;font-size:13px;line-height:1.45}
+.desc i{display:block;margin-top:5px;color:var(--mut);font-style:normal}
+label,.l{display:block;font-size:12px;color:var(--mut);margin:8px 0 3px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 10px;min-width:0}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--acc);outline-offset:0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pair{display:flex;gap:5px}.pair select{width:68px;flex:none;padding:9px 4px}
+.item{padding:10px 0 12px;border-top:1px solid var(--line)}
+.item:first-child{border-top:0;padding-top:0}
+.item .m{margin-bottom:2px}
+.line{display:grid;grid-template-columns:1fr 38px;gap:10px;align-items:end}
+.x{border:1px solid var(--line);background:transparent;color:var(--mut);border-radius:9px;height:40px;font-size:18px;cursor:pointer}
+.out{font-size:13px;color:var(--acc);margin-top:6px;min-height:16px}
+.add{width:100%;border:1px dashed var(--acc);background:transparent;color:var(--acc);border-radius:10px;padding:10px;font:inherit;cursor:pointer}
+.sum div{display:flex;justify-content:space-between;padding:5px 0;font-size:15px}
+.sum .mut{color:var(--mut)}
+.sum .big{border-top:1px solid var(--line);margin-top:6px;padding-top:10px;font-weight:700;font-size:18px}
+.chk{display:flex;gap:8px;align-items:center;margin-top:12px;font-size:14px;color:var(--ink)}
+.chk input{width:auto}
+.btn{width:100%;margin-top:6px;border:0;border-radius:12px;background:var(--acc);color:var(--accink);font:inherit;font-weight:700;padding:14px;cursor:pointer}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+#msg{min-height:20px;margin-top:10px;font-size:14px;color:var(--mut);text-align:center}
+</style>
+</head>
+<body>
+<main>
+<h1>Orçamento Kit Festa</h1>
+<p class="sub">Informe os materiais e os valores. O preço sai pronto, com despesas da casa e lucro já somados.</p>
+
+<section class="card">
+<h2>1. Dados do orçamento</h2>
+<p class="desc"><b>O que colocar:</b> o nome da sua confeitaria e contato (ficam salvos), quem é o cliente, o nome do kit e quantos kits ele pediu. A validade é quantos dias o preço vale.<i>Exemplo: Cliente Maria Souza, Kit Festa Unicórnio, 20 kits, validade 7 dias.</i></p>
+<div class="g2">
+<div><label for="biz">Sua confeitaria</label><input id="biz" placeholder="Doces da Ana"></div>
+<div><label for="ct">Contato (WhatsApp)</label><input id="ct" placeholder="(41) 90000-0000" inputmode="tel"></div>
+</div>
+<label for="cli">Nome do cliente</label><input id="cli" placeholder="Maria Souza">
+<label for="kit">Nome do kit</label><input id="kit" value="Kit Festa" placeholder="Kit Festa Unicórnio">
+<div class="g2">
+<div><label for="qtd">Quantidade de kits</label><input id="qtd" value="1" inputmode="numeric"></div>
+<div><label for="val">Validade (dias)</label><input id="val" value="7" inputmode="numeric"></div>
+</div>
+<label for="obs">Observações (opcional)</label><textarea id="obs" rows="2" placeholder="Entrega no dia da festa, sinal de 50%"></textarea>
+</section>
+
+<section class="card">
+<h2>2. Materiais de 1 kit</h2>
+<p class="desc"><b>O que colocar:</b> cada ingrediente que vai em 1 kit. Informe quanto você <b>usou</b>, quanto <b>veio na embalagem</b> e quanto <b>pagou</b> nela. O app calcula só o custo da parte usada. Se deixar “veio na embalagem” vazio, ele considera o valor inteiro.<i>Exemplo: Leite condensado, usei 150 g, veio 395 g, paguei R$ 4,79. O custo no kit será R$ 1,82.</i></p>
+<div id="mat"></div>
+<button class="add" id="addmat" type="button">+ Adicionar material</button>
+</section>
+
+<section class="card">
+<h2>3. Embalagens e itens adicionais</h2>
+<p class="desc"><b>O que colocar:</b> tudo que acompanha o kit e não é ingrediente: caixa, saquinho, fita, cartão, topper, enfeites. Funciona do mesmo jeito: quanto usou, quanto veio no pacote e quanto pagou.<i>Exemplo: Caixa para kit, usei 1 un, vieram 10 un, paguei R$ 25,00. O custo no kit será R$ 2,50.</i></p>
+<div id="ext"></div>
+<button class="add" id="addext" type="button">+ Adicionar item</button>
+</section>
+
+<section class="card sum">
+<h2>4. Resumo do preço (só você vê)</h2>
+<p class="desc"><b>O que é:</b> como o preço do kit foi formado. As despesas da casa (30%) e o lucro (50%) entram sozinhos sobre o custo. O cliente não vê esses valores no PDF.<i>Exemplo: custo de R$ 10,00 + R$ 3,00 de despesas + R$ 5,00 de lucro = R$ 18,00 por kit.</i></p>
+<div class="mut"><span>Materiais</span><b id="s1">R$ 0,00</b></div>
+<div class="mut"><span>Embalagens e adicionais</span><b id="s1b">R$ 0,00</b></div>
+<div><span>Custo total de 1 kit</span><b id="s1c">R$ 0,00</b></div>
+<div class="mut"><span>+ Despesas da casa (30%)</span><b id="s2">R$ 0,00</b></div>
+<div class="mut"><span>+ Lucro (50%)</span><b id="s3">R$ 0,00</b></div>
+<div class="big"><span>Preço de cada kit</span><b id="s4">R$ 0,00</b></div>
+<div class="big" style="border:0;margin:0;padding-top:4px"><span>Total do pedido</span><b id="s5">R$ 0,00</b></div>
+<label class="chk"><input type="checkbox" id="comp" checked> Mostrar a composição do kit (itens e quantidades) no PDF</label>
+</section>
+
+<button class="btn" id="pdf" type="button" disabled>Gerar PDF para o cliente</button>
+<div id="msg"></div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(function(){
+var DESP=0.30, LUCRO=0.50;
+var F={g:1,kg:1000,ml:1,l:1000,un:1}, FAM={g:"m",kg:"m",ml:"v",l:"v",un:"u"};
+var UN=["g","kg","ml","l","un"];
+var PH={mat:["Leite condensado","150","395","4,79"],ext:["Caixa para kit","1","10","25,00"]};
+var $=function(s){return document.querySelector(s)};
+var data={mat:[],ext:[]};
+function newRow(k){return {m:"",a:"",ua:k==="ext"?"un":"g",b:"",ub:k==="ext"?"un":"g",v:"",out:null}}
+for(var i=0;i<3;i++) data.mat.push(newRow("mat"));
+for(i=0;i<2;i++) data.ext.push(newRow("ext"));
+
+function num(v){
+  v=String(v==null?"":v).replace(/[^\d.,]/g,"");
+  if(v.indexOf(",")>-1) v=v.replace(/\./g,"").replace(",",".");
+  var n=parseFloat(v); return isNaN(n)?0:n;
+}
+function brl(n){return n.toLocaleString("pt-BR",{style:"currency",currency:"BRL"}).replace(/\u00a0/g," ")}
+function msg(t){$("#msg").textContent=t||""}
+
+function rowCost(r){
+  var v=num(r.v), a=num(r.a), b=num(r.b);
+  if(v<=0) return {c:0,t:""};
+  if(!b) return {c:v,t:"Custo no kit: "+brl(v)+" (valor inteiro)"};
+  if(!a) return {c:0,t:"Informe quanto você usou no kit."};
+  if(FAM[r.ua]!==FAM[r.ub]) return {c:0,t:"Unidades diferentes: não dá para comparar, por exemplo, g com ml."};
+  var c=v*(a*F[r.ua])/(b*F[r.ub]);
+  return {c:c,t:"Custo no kit: "+brl(c)};
+}
+function sumSec(k){
+  var t=0; data[k].forEach(function(r){var x=rowCost(r); t+=x.c; if(r.out) r.out.textContent=x.t}); return t;
+}
+function calc(){
+  var cm=sumSec("mat"), ce=sumSec("ext"), cost=cm+ce;
+  var qtd=Math.max(1,Math.floor(num($("#qtd").value))||1);
+  var desp=cost*DESP, luc=cost*LUCRO;
+  var unit=Math.ceil((cost+desp+luc)*100-1e-9)/100, total=unit*qtd;
+  $("#s1").textContent=brl(cm); $("#s1b").textContent=brl(ce); $("#s1c").textContent=brl(cost);
+  $("#s2").textContent=brl(desp); $("#s3").textContent=brl(luc);
+  $("#s4").textContent=brl(unit); $("#s5").textContent=brl(total);
+  $("#pdf").disabled=!(cost>0);
+  return {cost:cost,qtd:qtd,unit:unit,total:total};
+}
+
+function el(t,c){var e=document.createElement(t); if(c) e.className=c; return e}
+function lab(t){var s=el("span","l"); s.textContent=t; return s}
+function field(cls,ph,val,mode,cb){
+  var i=el("input",cls); i.placeholder=ph; i.value=val; if(mode) i.inputMode=mode;
+  i.addEventListener("input",function(){cb(i.value);calc()}); return i;
+}
+function pair(label,ph,r,kf,uf){
+  var w=el("div"), p=el("div","pair");
+  p.appendChild(field("",ph,r[kf],"decimal",function(v){r[kf]=v}));
+  var s=el("select"); UN.forEach(function(u){var o=el("option"); o.value=u; o.textContent=u; if(u===r[uf]) o.selected=true; s.appendChild(o)});
+  s.addEventListener("change",function(){r[uf]=s.value; calc()});
+  p.appendChild(s); w.appendChild(lab(label)); w.appendChild(p); return w;
+}
+function draw(k){
+  var box=$("#"+k); box.innerHTML="";
+  data[k].forEach(function(r,i){
+    var it=el("div","item");
+    it.appendChild(field("m",PH[k][0],r.m,"",function(v){r.m=v}));
+    var g=el("div","g2");
+    g.appendChild(pair("Usei no kit",PH[k][1],r,"a","ua"));
+    g.appendChild(pair("Veio na embalagem",PH[k][2],r,"b","ub"));
+    it.appendChild(g);
+    var ln=el("div","line"), w=el("div");
+    w.appendChild(lab("Paguei na embalagem (R$)")); w.appendChild(field("",PH[k][3],r.v,"decimal",function(v){r.v=v}));
+    var x=el("button","x"); x.type="button"; x.textContent="×"; x.setAttribute("aria-label","Remover");
+    x.addEventListener("click",function(){data[k].splice(i,1); if(!data[k].length) data[k].push(newRow(k)); draw(k); calc()});
+    ln.appendChild(w); ln.appendChild(x); it.appendChild(ln);
+    r.out=el("div","out"); it.appendChild(r.out); box.appendChild(it);
+  });
+}
+$("#addmat").addEventListener("click",function(){data.mat.push(newRow("mat")); draw("mat"); calc()});
+$("#addext").addEventListener("click",function(){data.ext.push(newRow("ext")); draw("ext"); calc()});
+$("#qtd").addEventListener("input",calc);
+
+try{ $("#biz").value=localStorage.getItem("kf_biz")||""; $("#ct").value=localStorage.getItem("kf_ct")||""; }catch(e){}
+function keep(){ try{ localStorage.setItem("kf_biz",$("#biz").value); localStorage.setItem("kf_ct",$("#ct").value); }catch(e){} }
+$("#biz").addEventListener("input",keep); $("#ct").addEventListener("input",keep);
+
+function slug(s){return (s||"cliente").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"cliente"}
+
+function buildPdf(c){
+  var J=window.jspdf.jsPDF, d=new J({unit:"mm",format:"a4"});
+  var now=new Date(), dt=now.toLocaleDateString("pt-BR");
+  var biz=$("#biz").value.trim()||"Confeitaria", ct=$("#ct").value.trim();
+  var cli=$("#cli").value.trim(), kit=$("#kit").value.trim()||"Kit Festa";
+  var dias=Math.max(1,Math.floor(num($("#val").value))||7), obs=$("#obs").value.trim();
+  var A=[190,70,110];
+
+  d.setFillColor(A[0],A[1],A[2]); d.rect(0,0,210,36,"F");
+  d.setTextColor(255,255,255); d.setFont("helvetica","bold"); d.setFontSize(20); d.text(biz,15,16,{maxWidth:100});
+  d.setFont("helvetica","normal"); d.setFontSize(10); if(ct) d.text(ct,15,26);
+  d.setFont("helvetica","bold"); d.setFontSize(18); d.text("ORÇAMENTO",195,16,{align:"right"});
+  d.setFont("helvetica","normal"); d.setFontSize(10); d.text("Data: "+dt,195,26,{align:"right"});
+
+  var y=50; d.setTextColor(40,30,34);
+  d.setFont("helvetica","bold"); d.setFontSize(10); d.text("CLIENTE",15,y);
+  d.setFont("helvetica","normal"); d.setFontSize(12); d.text(cli||"-",15,y+6);
+
+  y=68; d.setFillColor(251,233,239); d.rect(15,y,180,9,"F");
+  d.setFont("helvetica","bold"); d.setFontSize(10); d.setTextColor(120,40,70);
+  d.text("Descrição",18,y+6); d.text("Qtd",132,y+6,{align:"right"}); d.text("Valor unitário",165,y+6,{align:"right"}); d.text("Total",192,y+6,{align:"right"});
+  y+=16; d.setFont("helvetica","normal"); d.setFontSize(11); d.setTextColor(40,30,34);
+  var kl=d.splitTextToSize(kit,95); d.text(kl,18,y);
+  d.text(String(c.qtd),132,y,{align:"right"}); d.text(brl(c.unit),165,y,{align:"right"}); d.text(brl(c.total),192,y,{align:"right"});
+  y+=kl.length*5+2; d.setDrawColor(236,217,223); d.line(15,y,195,y); y+=10;
+
+  function block(title,list){
+    list=list.filter(function(r){return r.m.trim()}); if(!list.length) return;
+    if(y>255){d.addPage(); y=20}
+    d.setFont("helvetica","bold"); d.setFontSize(11); d.setTextColor(40,30,34); d.text(title,15,y); y+=7;
+    d.setFont("helvetica","normal"); d.setFontSize(10);
+    list.forEach(function(r){
+      if(y>270){d.addPage(); y=20}
+      var q=r.a.trim()?(" - "+r.a.trim()+" "+r.ua):"";
+      var t=d.splitTextToSize("- "+r.m.trim()+q,170); d.text(t,18,y); y+=t.length*5;
+    });
+    y+=6;
+  }
+  if($("#comp").checked){ block("Composição de cada kit",data.mat); block("Embalagem e adicionais",data.ext); }
+
+  if(y>235){d.addPage(); y=20}
+  d.setFillColor(A[0],A[1],A[2]); d.roundedRect(105,y,90,22,3,3,"F");
+  d.setTextColor(255,255,255); d.setFont("helvetica","normal"); d.setFontSize(10); d.text("VALOR TOTAL",110,y+8);
+  d.setFont("helvetica","bold"); d.setFontSize(18); d.text(brl(c.total),190,y+16,{align:"right"});
+  y+=34;
+
+  d.setTextColor(40,30,34); d.setFont("helvetica","normal"); d.setFontSize(10);
+  if(obs){ d.setFont("helvetica","bold"); d.text("Observações",15,y); y+=6; d.setFont("helvetica","normal");
+    var ol=d.splitTextToSize(obs,180); d.text(ol,15,y); y+=ol.length*5+6; }
+  d.setTextColor(110,95,100); d.text("Orçamento válido por "+dias+(dias===1?" dia":" dias")+", a partir de "+dt+".",15,y);
+  d.setFontSize(11); d.setTextColor(A[0],A[1],A[2]); d.text("Obrigado pela preferência!",105,285,{align:"center"});
+  return d;
+}
+
+$("#pdf").addEventListener("click",async function(){
+  var c=calc(); if(c.cost<=0) return;
+  if(!window.jspdf){msg("Não foi possível carregar o gerador de PDF. Recarregue a página.");return}
+  msg("Gerando PDF...");
+  try{
+    var d=buildPdf(c);
+    var now=new Date(), stamp=now.toISOString().slice(0,10).replace(/-/g,"");
+    var name="orcamento-"+slug($("#cli").value)+"-"+stamp+".pdf";
+    d.save(name);
+    msg("PDF pronto para enviar ao cliente.");
+  }catch(e){
+    msg("Não foi possível gerar o PDF. Tente novamente.");
+  }
+});
+
+draw("mat"); draw("ext"); calc();
+})();
+</script>
+</body>
+</html>
